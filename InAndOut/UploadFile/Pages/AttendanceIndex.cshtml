@@ -1,0 +1,90 @@
+﻿@page
+@model AttendanceIndexModel
+@{
+    ViewData["Title"] = "Attendance";
+}
+
+
+<h1>Attendance Document Management</h1>
+
+<p>
+    <a asp-page="AttendanceCreate">Document Details</a>
+</p>
+
+<p>
+    @using (Html.BeginForm("AttendanceIndex", "AttendanceIndex", FormMethod.Get))
+    {
+        <b>Search</b>@Html.RadioButton("Searchby", "Reference", true)<b>Reference</b>
+        @Html.RadioButton("Searchby", "Name")<b>Name</b>
+        @Html.TextBox("Search")<input type="submit" value="Search" />
+
+    }
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Attendances[0].Number)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attendances[0].Reference)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attendances[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attendances[0].Date)
+            </th>
+            <th>
+                Upload
+            </th>
+            <th>Download</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Attendances)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reference)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                <a asp-page="AttendanceUpload" asp-route-id="@item.Id">Upload Document</a>
+            </td>
+            <td>
+                @if (item.Attachment != null)
+                {
+                    <form asp-page-handler="Download" method="post" asp-route-id="@item.Id">
+                        <input type="submit" 
+                               class="btn btn-outline-dark"
+                               onclick="return confirm('Are you sure you want to Download the record')"
+                               value="Download">
+                    </form>
+                }
+            </td>
+            <td>
+                @if (item.Attachment != null)
+                {
+                    <form asp-page-handler="Delete" method="post" asp-route-id="@item.Id">
+                        <input type="submit" 
+                               class="btn btn-outline-danger"
+                               onclick="return confirm('Are you sure you want to Delete the record')"
+                               value="Delete">
+                    </form>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

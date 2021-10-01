@@ -1,0 +1,196 @@
+﻿@model IEnumerable<InAndOut.Models.ExamResult>
+
+
+<div class="row pt-4">
+    <div class="col-6">
+        <h2 class="text-primary">Exam Results List</h2>
+    </div>
+    <div class="col-6 text-right">
+        <a asp-controller="ExamResult" asp-action="Create" class="btn btn-outline-primary">Create new Exam Result</a>
+    </div>
+</div>
+<br />
+
+
+@if (Model.Count() > 0)
+{
+
+    <div class="container-fluid">
+        <div class="row">
+
+            @using (Html.BeginForm("Index", "ExamResult", FormMethod.Post))
+            {
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+
+                        <label class="col-md-2 control-label">Search</label>
+
+                        <div class="d-flex">
+
+                            <input type="text" name="searchTxt" class="form-control" placeholder="Search your text here" style="max-width: 100%" />
+
+                            <div class="ml-2">
+                                <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span>Search</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>
+                                Id
+                            </th>
+                            <th style="text-align:center">
+                                Student Name
+                                @*@Html.ActionLink("Name", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc"), SortBy = "Name", PageNumber = ViewBag.PageNumber == 0 ? 1 : ViewBag.PageNumber })*@
+                            </th>
+                            <th style="text-align:center">
+                                Exam Name
+                                @*@Html.ActionLink("Gender", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc"), SortBy = "Gender", PageNumber = ViewBag.PageNumber == 0 ? 1 : ViewBag.PageNumber })*@
+                            </th>
+                            <th style="text-align:center">
+                                Exam Type
+                                @*@Html.ActionLink("Section", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc"), SortBy = "Section", PageNumber = ViewBag.PageNumber == 0 ? 1 : ViewBag.PageNumber })*@
+                            </th>
+                            <th style="text-align:center">
+                                Duration
+                                @*@Html.ActionLink("BirthDate", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc"), SortBy = "BirthDate", PageNumber = ViewBag.PageNumber == 0 ? 1 : ViewBag.PageNumber })*@
+                            </th>
+                            <th style="text-align:center">
+                                Marks
+                                @*@Html.ActionLink("Phone", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc"), SortBy = "Phone", PageNumber = ViewBag.PageNumber == 0 ? 1 : ViewBag.PageNumber })*@
+                            </th>
+                            <th style="text-align:center">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var examResult in Model)
+                        {
+                            <tr>
+                                <td width="5%">@examResult.Id</td>
+                                <td style="text-align:center" width="10%">@examResult.StudentName</td>
+                                <td style="text-align:center" width="10%">@examResult.ExamName</td>
+                                <td style="text-align:center" width="10%">@examResult.ExamType</td>
+                                <td style="text-align:center" width="10%">@examResult.Duration</td>
+                                <td style="text-align:center" width="10%">@examResult.Marks</td>
+                                <td style="text-align:center" width="10%">
+                                    <div class="w-100 btn-group" role="group">
+                                        <a asp-controller="ExamResult" asp-action="Update" asp-route-Id="@examResult.Id" class="btn btn-outline-primary mx-1">Update</a>
+                                        <a asp-controller="ExamResult" asp-action="Delete" asp-route-Id="@examResult.Id" class="btn btn-outline-danger mx-1">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+                @{
+
+                    double totalPages = ViewBag.TotalPages;
+
+                    <ul class="pagination">
+                        <div class="mr-2">
+                            @if (ViewBag.PageNumber == 1)
+                            {
+                            <li>
+                                @Html.ActionLink("Previous", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "Name" : ViewBag.SortBy, PageNumber = ViewBag.PageNumber })
+                            </li>
+
+                        }
+                        else
+                        {
+
+                            <li>
+                                @Html.ActionLink("Previous", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "Name" : ViewBag.SortBy, PageNumber = ViewBag.PageNumber - 1 })
+                            </li>
+
+                        }
+                    </div>
+
+
+
+                    @for (int i = 1; i <= totalPages; i++)
+                    {
+
+                        if (i == ViewBag.PageNumber)
+                        {
+
+
+                            <li class="ml-3">
+                                @Html.ActionLink(i.ToString(), "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "Name" : ViewBag.SortBy, PageNumber = i })
+                            </li>
+
+                        }
+
+                        else
+                        {
+
+                            <li class="ml-3">
+                                @Html.ActionLink(i.ToString(), "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "Name" : ViewBag.SortBy, PageNumber = i })
+                            </li>
+
+                        }
+
+
+                    }
+
+
+
+                    <div class="ml-4">
+
+                        @if (ViewBag.PageNumber == totalPages)
+                        {
+
+                            <li>
+                                @Html.ActionLink("Next", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "Name" : ViewBag.SortBy, PageNumber = ViewBag.PageNumber })
+                            </li>
+                        }
+
+                        else
+                        {
+
+                            <li>
+                                @Html.ActionLink("Next", "Index", new { SortOrder = ViewBag.SortOrder == null ? "Asc" : ViewBag.SortOrder, SortBy = ViewBag.SortBy == null ? "Name" : ViewBag.SortBy, PageNumber = ViewBag.PageNumber + 1 })
+                            </li>
+
+                        }
+                    </div>
+
+                    </ul>
+
+                }
+
+            </div>
+
+        </div>
+
+        </div>
+
+    }
+    else
+    {
+        <p>No such Exam Result record created yet</p>
+    }
+
+
+
+
+
+
+
+
+
